@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>RemindHub Icon Asset Generator</title></head>
+<body style="font-family:sans-serif;background:#0f172a;color:#fff;display:flex;flex-direction:column;align-items:center;padding:40px;">
+  <h2 style="margin-bottom:8px;">RemindHub Asset Generator</h2>
+  <p style="color:#94a3b8;font-size:14px;margin-bottom:24px;">Generates clean 512x512 assets with zero grid lines.</p>
+
+  <div style="display:flex;gap:30px;flex-wrap:wrap;justify-content:center;">
+    <div style="text-align:center;">
+      <canvas id="fgCanvas" width="512" height="512" style="width:200px;height:200px;background:#1e293b;border-radius:24px;border:1px solid #334155;"></canvas>
+      <br>
+      <button id="dlFg" style="margin-top:12px;padding:10px 20px;background:#059669;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;">
+        Download Foreground (PNG)
+      </button>
+    </div>
+
+    <div style="text-align:center;">
+      <canvas id="fullCanvas" width="512" height="512" style="width:200px;height:200px;background:#1e293b;border-radius:24px;border:1px solid #334155;"></canvas>
+      <br>
+      <button id="dlFull" style="margin-top:12px;padding:10px 20px;background:#0284c7;color:#fff;border:none;border-radius:10px;font-weight:bold;cursor:pointer;">
+        Download Full Card (PNG)
+      </button>
+    </div>
+  </div>
+
+  <script>
+    function drawSquircle(ctx, x, y, size, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + size, y, x + size, y + size, r);
+      ctx.arcTo(x + size, y + size, x, y + size, r);
+      ctx.arcTo(x, y + size, x, y, r);
+      ctx.arcTo(x, y, x + size, y, r);
+      ctx.closePath();
+    }
+
+    function renderTile(ctx, x, y, size, r) {
+      // Emerald-teal gradient fill
+      const grad = ctx.createLinearGradient(x, y, x + size, y + size);
+      grad.addColorStop(0, '#0cb68b');
+      grad.addColorStop(1, '#029672');
+      drawSquircle(ctx, x, y, size, r);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Circular ring
+      const cx = x + size / 2;
+      const cy = y + size / 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, size * 0.30, 0, Math.PI * 2);
+      ctx.lineWidth = size * 0.07;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+
+      // Bold Checkmark
+      ctx.beginPath();
+      ctx.moveTo(cx - size * 0.13, cy);
+      ctx.lineTo(cx - size * 0.03, cy + size * 0.10);
+      ctx.lineTo(cx + size * 0.14, cy - size * 0.10);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = size * 0.07;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+    }
+
+    // 1. Transparent Foreground (For Android Studio Asset Studio)
+    const fg = document.getElementById('fgCanvas').getContext('2d');
+    renderTile(fg, 76, 76, 360, 96);
+
+    // 2. Full Card with White Background (For Web / Play Store / Direct preview)
+    const full = document.getElementById('fullCanvas').getContext('2d');
+    full.fillStyle = '#ffffff';
+    full.fillRect(0, 0, 512, 512);
+    renderTile(full, 88, 88, 336, 92);
+
+    document.getElementById('dlFg').onclick = () => {
+      const a = document.createElement('a');
+      a.download = 'remindhub_foreground.png';
+      a.href = document.getElementById('fgCanvas').toDataURL('image/png');
+      a.click();
+    };
+
+    document.getElementById('dlFull').onclick = () => {
+      const a = document.createElement('a');
+      a.download = 'logo.png';
+      a.href = document.getElementById('fullCanvas').toDataURL('image/png');
+      a.click();
+    };
+  </script>
+</body>
+</html>
