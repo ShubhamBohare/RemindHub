@@ -482,12 +482,6 @@
                     </svg>
                 </button>
 
-                <!-- Apple Button -->
-                <button type="button" onclick="loginWithApple()" title="Sign in with Apple"
-                        class="w-11 h-11 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-center hover:scale-105 active:scale-95 transition text-slate-900 dark:text-white">
-                    <i data-lucide="apple" class="w-4 h-4 fill-current"></i>
-                </button>
-
                 <!-- Phone Login Button -->
                 <button type="button" onclick="loginWithPhoneOption()" title="Sign in with Phone"
                         class="w-11 h-11 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-center hover:scale-105 active:scale-95 transition text-emerald-600">
@@ -1821,13 +1815,6 @@
 
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithRedirect(provider);
-    }
-
-    function loginWithApple() {
-      const provider = new firebase.auth.OAuthProvider('apple.com');
-      provider.addScope('email');
-      provider.addScope('name');
       auth.signInWithRedirect(provider);
     }
 
